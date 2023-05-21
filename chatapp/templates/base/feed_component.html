@@ -42,17 +42,17 @@
 <div class="pagination">
     <br>
     {% if page.has_previous %}
-        <a class="btn btn--pill" href="?page={{ page.previous_page_number }}">previous</a>
+        <a class="btn btn--primary" style="background: #312f2f;" href="?page={{ page.previous_page_number }}">previous</a>
     {% endif %}
     {% for num in page_range %}
         {% if page.number == num %}
             <span class="current-page">{{ num }}</span>
         {% elif num > page.number|add:'-3' and num < page.number|add:'3' %}
-            <a class="btn btn--pill" href="?page={{ num }}">{{ num }}</a>
+            <a class="btn btn--primary" style="background: #312f2f;" href="?page={{ num }}">{{ num }}</a>
         {% endif %}
     {% endfor %}
     {% if page.has_next %}
-        <a class="btn btn--pill" href="?page={{ page.next_page_number }}">next</a>
+        <a class="btn btn--primary" style="background: #312f2f;" href="?page={{ page.next_page_number }}">next</a>
     {% endif %}
 </div>
 

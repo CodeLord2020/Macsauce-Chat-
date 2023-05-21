@@ -93,6 +93,6 @@ function switchColor() {
   root.style.setProperty('--color-main', nextColor);
 }
 
-// Call the switchColor function every 3 seconds (3000 milliseconds)
+// Call the switchColor function every 120 seconds (120000 milliseconds)
 setInterval(switchColor, 120000);
 

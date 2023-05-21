@@ -164,8 +164,12 @@ def userProfile(request, pk):
     rooms = user.room_set.all()
     room_messages = user.message_set.all()
     topics = Topic.objects.all()
+    paginator = Paginator(rooms, 10) 
+    page_number = request.GET.get('page', 1)
+    page = paginator.get_page(page_number)
+
     context = {'user': user, 'rooms': rooms,
-               'room_messages': room_messages, 'topics': topics}
+               'room_messages': room_messages, 'page': page, 'page_range': paginator.page_range, 'topics': topics}
     return render(request, 'base/profile.html', context)
 
 
