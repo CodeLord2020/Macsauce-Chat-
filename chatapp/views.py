@@ -14,6 +14,8 @@ from django.core.mail import send_mail
 from django.utils.encoding import force_bytes
 from django.template.loader import render_to_string
 
+from django.core.paginator import Paginator
+
 from django.conf import settings
 
 
@@ -66,6 +68,7 @@ def registerPage(request):
 
     return render(request, 'base/login_register.html', {'form': form})
 
+from django.utils.html import format_html
 def forgot_password(request):
     page = 'forgot_password'
     if request.method == 'POST':
@@ -75,9 +78,10 @@ def forgot_password(request):
             token = default_token_generator.make_token(user)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             subject = 'Reset Password Request:'
+
             reset_link = request.build_absolute_uri('/') + f'reset_password/{uid}/{token}/'
-            message = f'Click on the link to reset your password: {reset_link}'
-            email_from = settings.EMAIL_HOST_USER
+            message = f' Hello {user.username.upper()}, click on the link to reset your password: {reset_link}'
+            email_from = "Macsauce Discuss<brasheed240@gmail.com>"
             send_mail(subject, message, email_from, [email], fail_silently=False)
             messages.success(request, 'An email has been sent to reset your password')
             return redirect ('login')
@@ -121,13 +125,16 @@ def home(request):
         Q(name__icontains=q) |
         Q(description__icontains=q)
     )
-
+    paginator = Paginator(rooms, 10) 
+    page_number = request.GET.get('page', 1)
+    page = paginator.get_page(page_number)
+    
     topics = Topic.objects.all()[0:5]
     room_count = rooms.count()
     room_messages = Message.objects.filter(
-        Q(room__topic__name__icontains=q))[0:3]
+        Q(room__topic__name__icontains=q))[0:10]
 
-    context = {'rooms': rooms, 'topics': topics,
+    context = {'rooms': rooms, 'topics': topics, 'page': page, 'page_range': paginator.page_range,
                'room_count': room_count, 'room_messages': room_messages}
     return render(request, 'base/home.html', context)
 

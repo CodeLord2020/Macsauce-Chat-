@@ -70,7 +70,7 @@ if (conversationThread) conversationThread.scrollTop = conversationThread.scroll
 
 
 // Define an array of colors to switch between
-const colorOptions = ['#f14a66', '#ffcc00', '#3f51b5'];
+const colorOptions = ['#f14a66', '#ffcc00', '#5f6deb', '#4bf13b', '#5fe6eb'];
 
 // Get the root element
 const root = document.documentElement;
