@@ -1,0 +1,26 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% for messenger in messengers %}
+<div class="roomListRoom">
+    <div class="roomListRoom__header">
+        <a href="{% url 'user-profile' messenger.id %}" class="roomListRoom__author">
+            <div class="avatar avatar--small">
+                <img src="{{messenger.avatar.url}}" />
+            </div> </a>
+            <span><a href="{% url 'direct_messages' messenger.username %}">{{ messenger.username }}</a></span>
+       
+        {% if messenger.last_message_time %}
+            <span class="message-time">{{ messenger.last_message_time|timesince }} ago</span>
+        {% else %}
+            <span class="message-time">No messages yet</span>
+        {% endif %}
+    </div>
+
+
+</div>
+
+{% endfor %}
+
+{% endblock content %}

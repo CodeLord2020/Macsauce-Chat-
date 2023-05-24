@@ -61,3 +61,37 @@ class Message(models.Model):
 
     def __str__(self):
         return self.body[0:50]
+
+
+class DirectMessage(models.Model):
+    sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
+    recipient = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+
+    class Meta:
+        ordering = ['-created_at']
+
+class InboxMessengers(models.Model):
+    inbox = models.ForeignKey('Inbox', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class Inbox(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='inbox')
+    messengers = models.ManyToManyField(User, through=InboxMessengers, related_name='messenger_inbox')
+    last_message_time = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Inbox for {self.user.username}"
+
+    # def update_last_message_time(self):
+    #     last_message = self.directmessage_set.order_by('-created_at').first()
+    #     if last_message:
+    #         self.last_message_time = last_message.created_at
+    #     else:
+    #         self.last_message_time = None
+    #     self.save()
+    # def save(self, *args, **kwargs):
+    #     self.update_last_message_time()
+    #     super().save(*args, **kwargs)

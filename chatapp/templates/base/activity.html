@@ -1,7 +1,8 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<main class="layout">
+
+<main class="create-room layout">
   <div class="container">
     <div class="layout__box">
       <div class="layout__boxHeader">
@@ -12,16 +13,15 @@
               <path
                 d="M13.723 2.286l-13.723 13.714 13.719 13.714 1.616-1.611-10.96-10.96h27.625v-2.286h-27.625l10.965-10.965-1.616-1.607z">
               </path>
-              </path>
             </svg>
           </a>
           <h3>Recent Activities</h3>
         </div>
       </div>
-
+      
       <div class="activities-page layout__body">
 
-        {% for message in room_messages %}
+        {% for message in room_messages reversed%}
         <div class="activities__box">
           <div class="activities__boxHeader roomListRoom__header">
             <a href="{% url 'user-profile' message.user.id %}" class="roomListRoom__author">

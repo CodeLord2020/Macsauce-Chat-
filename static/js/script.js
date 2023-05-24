@@ -96,3 +96,7 @@ function switchColor() {
 // Call the switchColor function every 120 seconds (120000 milliseconds)
 setInterval(switchColor, 120000);
 
+
+
+
+

@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q, Max
 from django.contrib.auth import authenticate, login, logout
-from .models import Room, Topic, Message, User
+from .models import Room, Topic, Message, User, DirectMessage, Inbox, InboxMessengers
 from .forms import RoomForm, UserForm, MyUserCreationForm
 
 
@@ -12,7 +12,8 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.core.mail import send_mail
 from django.utils.encoding import force_bytes
-from django.template.loader import render_to_string
+from django.template.loader import render_to_string 
+from django.utils import timezone
 
 from django.core.paginator import Paginator
 
@@ -263,11 +264,73 @@ def deleteMessage(request, pk):
 
 @login_required(login_url='login')
 def activityPage(request):
-    room_messages = Message.objects.all()
+    room_messages = Message.objects.all().order_by('-created')[0:5]
     return render(request, 'base/activity.html', {'room_messages': room_messages})
 
+from django.db.models import Max
+@login_required(login_url='login')
+def myinbox(request):
+    user = request.user
+    inbox, created = Inbox.objects.get_or_create(user=user)    
+    messengers = inbox.messengers.all().annotate(
+        last_message_time=Max(
+            'sent_messages__created_at', 
+            filter=Q(received_messages__sender=user) | Q(sent_messages__sender=user)
+            )
+        ).order_by('-last_message_time')
+
+    context = {
+        'inbox': inbox,
+        'messengers': messengers,
+    }
+
+    return render(request, 'base/inbox.html', context)
 
 
 
+@login_required(login_url='login')
+def direct_message(request, username):
+    sender = request.user
+    recipient = get_object_or_404(User, username=username)
+    messages = DirectMessage.objects.filter(sender=sender, recipient=recipient) | DirectMessage.objects.filter(sender=recipient, recipient=sender)
+    messages = messages.order_by('created_at')
 
+    context = {
+        'messages': messages,
+        'sender': sender,
+        'recipient': recipient,
+        
+    }
+    recipient_inbox, created = Inbox.objects.get_or_create(user=recipient) 
+    sender_inbox, created = Inbox.objects.get_or_create(user=sender)
 
+    if request.method == 'POST':
+        recipient_inbox.messengers.add(sender)
+        sender_inbox.messengers.add(recipient)
+        message = DirectMessage.objects.create(
+            sender=sender,
+            recipient=recipient,
+            message=request.POST.get('body')
+        )
+        message.save()
+
+        recipient_inbox.last_message_time = timezone.now()
+        #sender_inbox.last_message_time = timezone.now()
+        
+        #sender_inbox.save() 
+        recipient_inbox.save()
+
+        return redirect('direct_messages', recipient)
+
+    return render(request, 'base/direct_message.html', context)
+
+    
+@login_required(login_url='login')
+def deleteDirectMessage(request, pk, chattee):
+    # Get the message object or return 404 if not found
+    message = get_object_or_404(DirectMessage, id=pk)
+    user = message.sender
+    message.delete()
+    
+    # Redirect back to the messages page or any other desired location
+    return redirect('direct_messages', chattee)
