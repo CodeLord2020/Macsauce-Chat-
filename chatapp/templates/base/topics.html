@@ -1,6 +1,81 @@
 {% extends 'main.html' %}
 
 {% block content %}
+<style>
+  .create-room {
+    flex: 1;
+    margin-top: 80px;
+  }
+  
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  
+  .layout__box {
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .layout__boxHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .layout__boxTitle {
+    display: flex;
+    align-items: center;
+  }
+  
+  .layout__boxTitle a {
+    margin-right: 10px;
+  }
+  
+  .topics-page {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .header__search {
+    margin-bottom: 20px;
+  }
+  
+  .topics__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .topics__list li {
+    margin-bottom: 10px;
+  }
+  
+  .topics__scrollContainer {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  @media only screen and (max-width: 767px) {
+    .layout__box {
+      padding: 10px;
+    }
+  
+    .layout__boxTitle {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .layout__boxTitle a {
+      margin-bottom: 10px;
+    }
+  }
+  
+  </style>
+
 <main class="create-room layout">
   <div class="container">
     <div class="layout__box">
@@ -30,17 +105,18 @@
             <input name="q" placeholder="Search for topics" />
           </label>
         </form>
-
+        
         <ul class="topics__list">
           <li>
             <a href="{% url 'topics' %}" class="active">All <span>{{topics.count}}</span></a>
           </li>
-          {% for topic in topics %}
           <li>
-            <a href="{% url 'home' %}?q={{topic.name}}">{{ topic.name }} <span>{{topic.room_set.all.count}}</span></a>
+            <div class="topics__scrollContainer"> <!-- Add a scroll container -->
+              {% for topic in topics %}
+              <a href="{% url 'home' %}?q={{topic.name}}">{{ topic.name }} <span>{{topic.room_set.all.count}}</span></a>
+              {% endfor %}
+            </div>
           </li>
-          {% endfor %}
-
         </ul>
       </div>
     </div>

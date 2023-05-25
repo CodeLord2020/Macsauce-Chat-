@@ -6,6 +6,9 @@ from django.db.models import Q, Max
 from django.contrib.auth import authenticate, login, logout
 from .models import Room, Topic, Message, User, DirectMessage, Inbox, InboxMessengers
 from .forms import RoomForm, UserForm, MyUserCreationForm
+from django.db.models import Max
+from django.utils.html import format_html
+
 
 
 from django.contrib.auth.tokens import default_token_generator
@@ -69,7 +72,7 @@ def registerPage(request):
 
     return render(request, 'base/login_register.html', {'form': form})
 
-from django.utils.html import format_html
+
 def forgot_password(request):
     page = 'forgot_password'
     if request.method == 'POST':
@@ -267,17 +270,31 @@ def activityPage(request):
     room_messages = Message.objects.all().order_by('-created')[0:5]
     return render(request, 'base/activity.html', {'room_messages': room_messages})
 
-from django.db.models import Max
+
 @login_required(login_url='login')
 def myinbox(request):
     user = request.user
-    inbox, created = Inbox.objects.get_or_create(user=user)    
-    messengers = inbox.messengers.all().annotate(
-        last_message_time=Max(
-            'sent_messages__created_at', 
-            filter=Q(received_messages__sender=user) | Q(sent_messages__sender=user)
-            )
-        ).order_by('-last_message_time')
+    inbox, created = Inbox.objects.get_or_create(user=user)  
+     # Annotate last_message_time for messages received by the user
+    received_messages = inbox.messengers.all().annotate(
+        last_message_time=Max('received_messages__created_at')
+    )
+
+    # Annotate last_message_time for messages sent by the user
+    sent_messages = inbox.messengers.all().annotate(
+        last_sent_message_time=Max('sent_messages__created_at')
+    )
+
+    # Combine the received_messages and sent_messages querysets
+    messengers = received_messages.union(sent_messages).order_by('-last_message_time')
+
+
+    # messengers = inbox.messengers.all().annotate(
+    #     last_message_time=Max(
+    #         'sent_messages__created_at', 
+    #         filter=Q(received_messages__sender=user) | Q(sent_messages__sender=user)
+    #         )
+    #     ).order_by('-last_message_time')
 
     context = {
         'inbox': inbox,

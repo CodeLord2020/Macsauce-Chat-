@@ -1,6 +1,14 @@
 {% extends 'main.html' %}
 
 {% block content %}
+<style>
+
+.activities-page {
+  overflow-y: auto; 
+  min-height: 500px; 
+  max-height: 700px; 
+}
+</style>
 
 <main class="create-room layout">
   <div class="container">
@@ -20,8 +28,8 @@
       </div>
       
       <div class="activities-page layout__body">
-
-        {% for message in room_messages reversed%}
+        <div class="activities__scrollContainer"></div>
+        {% for message in room_messages %}
         <div class="activities__box">
           <div class="activities__boxHeader roomListRoom__header">
             <a href="{% url 'user-profile' message.user.id %}" class="roomListRoom__author">
@@ -56,7 +64,7 @@
           </div>
         </div>
         {% endfor %}
-
+      </div>
       </div>
     </div>
   </div>

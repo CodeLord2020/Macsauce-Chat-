@@ -2,25 +2,61 @@
 
 {% block content %}
 
-{% for messenger in messengers %}
-<div class="roomListRoom">
-    <div class="roomListRoom__header">
-        <a href="{% url 'user-profile' messenger.id %}" class="roomListRoom__author">
-            <div class="avatar avatar--small">
-                <img src="{{messenger.avatar.url}}" />
-            </div> </a>
-            <span><a href="{% url 'direct_messages' messenger.username %}">{{ messenger.username }}</a></span>
-       
-        {% if messenger.last_message_time %}
-            <span class="message-time">{{ messenger.last_message_time|timesince }} ago</span>
-        {% else %}
-            <span class="message-time">No messages yet</span>
-        {% endif %}
-    </div>
+<style>
 
+    .activities-page {
+      overflow-y: auto; 
+      min-height: 400px; 
+      max-height: 700px; 
+    }
+    
+    </style>
+    
+    <main class="create-room layout">
+      <div class="container">
+        <div class="layout__box">
+          <div class="layout__boxHeader">
+            <div class="layout__boxTitle">
+              <a href="{% url 'user-profile' request.user.id %}">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                  <title>arrow-left</title>
+                  <path
+                    d="M13.723 2.286l-13.723 13.714 13.719 13.714 1.616-1.611-10.96-10.96h27.625v-2.286h-27.625l10.965-10.965-1.616-1.607z">
+                  </path>
+                </svg>
+              </a>
+              <h3>INBOX </h3>
+            </div>
+          </div>
+          
+          <div class="activities-page layout__body">
+            <div class="activities__scrollContainer"></div>
+            {% for messenger in messengers %}
+            <div class="roomListRoom">
+                <div class="roomListRoom__header">
+                    <a href="{% url 'user-profile' messenger.id %}" class="roomListRoom__author">
+                        <div class="avatar avatar--small">
+                            <img src="{{messenger.avatar.url}}" />
+                        </div> </a>
+                        <span><a href="{% url 'direct_messages' messenger.username %}">{{ messenger.username }}</a></span>
+                   
+                    {% if messenger.last_message_time %}
+                        <span class="message-time">{{ messenger.last_message_time|timesince }} ago</span>
+                    {% else %}
+                        <span class="message-time">No messages yet</span>
+                    {% endif %}
+                </div>
+            
+            
+            </div>
+            
+            {% endfor %}
+          </div>
+          </div>
+        </div>
+      </div>
+    </main>
 
-</div>
-
-{% endfor %}
 
 {% endblock content %}
+
