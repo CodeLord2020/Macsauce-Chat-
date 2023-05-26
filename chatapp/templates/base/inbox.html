@@ -6,8 +6,8 @@
 
     .activities-page {
       overflow-y: auto; 
-      min-height: 400px; 
-      max-height: 700px; 
+      min-height: 250px; 
+      max-height: 300px; 
     }
     
     </style>
@@ -40,16 +40,14 @@
                         <div class="avatar avatar--small">
                             <img src="{{messenger.avatar.url}}" />
                         </div> </a>
-                        <span><a href="{% url 'direct_messages' messenger.username %}">{{ messenger.username }}</a></span>
+                        <span><a href="{% url 'direct_messages' messenger.username %}">@{{ messenger.username }}</a></span>
                    
                     {% if messenger.last_message_time %}
                         <span class="message-time">{{ messenger.last_message_time|timesince }} ago</span>
                     {% else %}
                         <span class="message-time">No messages yet</span>
                     {% endif %}
-                </div>
-            
-            
+                      </div>
             </div>
             
             {% endfor %}
