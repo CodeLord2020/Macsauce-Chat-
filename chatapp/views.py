@@ -274,27 +274,14 @@ def activityPage(request):
 @login_required(login_url='login')
 def myinbox(request):
     user = request.user
-    inbox, created = Inbox.objects.get_or_create(user=user)  
-     # Annotate last_message_time for messages received by the user
-    received_messages = inbox.messengers.all().annotate(
-        last_message_time=Max('received_messages__created_at')
-    )
+    inbox, created = Inbox.objects.get_or_create(user=user)
 
-    # Annotate last_message_time for messages sent by the user
-    sent_messages = inbox.messengers.all().annotate(
-        last_sent_message_time=Max('sent_messages__created_at')
-    )
-
-    # Combine the received_messages and sent_messages querysets
-    messengers = received_messages.union(sent_messages).order_by('-last_message_time')
-
-
-    # messengers = inbox.messengers.all().annotate(
-    #     last_message_time=Max(
-    #         'sent_messages__created_at', 
-    #         filter=Q(received_messages__sender=user) | Q(sent_messages__sender=user)
-    #         )
-    #     ).order_by('-last_message_time')
+    messengers = inbox.messengers.all().annotate(
+        last_message_time=Max(
+            'sent_messages__created_at',
+            filter=Q(received_messages__recipient=user) | Q(sent_messages__recipient=user)
+        )
+    ).order_by('-last_message_time')
 
     context = {
         'inbox': inbox,
@@ -332,9 +319,8 @@ def direct_message(request, username):
         message.save()
 
         recipient_inbox.last_message_time = timezone.now()
-        #sender_inbox.last_message_time = timezone.now()
-        
-        #sender_inbox.save() 
+        sender_inbox.last_message_time = timezone.now()
+        sender_inbox.save() 
         recipient_inbox.save()
 
         return redirect('direct_messages', recipient)
