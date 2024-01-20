@@ -45,7 +45,7 @@
         <a class="btn btn--primary" style="background: #312f2f;" href="?page={{ page.previous_page_number }}">previous</a>
     {% endif %}
     {% for num in page_range %}
-        {% if page.number == num %}
+        {% if page.number == num %} &&
             <span class="current-page">{{ num }}</span>
         {% elif num > page.number|add:'-3' and num < page.number|add:'3' %}
             <a class="btn btn--primary" style="background: #312f2f;" href="?page={{ num }}">{{ num }}</a>
