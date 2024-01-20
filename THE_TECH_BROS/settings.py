@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = os.environ.get("DEBUG")
 APP_NAME = os.environ.get("FLY_APP_NAME")
 # ALLOWED_HOSTS = [f"{APP_NAME}.fly.dev"] 
-ALLOWED_HOSTS += ["192.168.178.209", "localhost",  "196.220.133.21", "196.220.133.9", "127.0.0.1"]
+# ALLOWED_HOSTS += ["192.168.178.209", "localhost",  "196.220.133.21", "196.220.133.9", "127.0.0.1"]
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
@@ -91,7 +91,7 @@ WSGI_APPLICATION = 'THE_TECH_BROS.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 
-import dj_database_url
+# import dj_database_url
 
 # DATABASES = {
 #     'default': dj_database_url.config(
