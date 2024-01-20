@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'whitenose.runserver_nostatic',
+    # 'whitenose.runserver_nostatic',
     'django.contrib.staticfiles',
 
     'chatapp',
@@ -52,7 +52,7 @@ AUTH_USER_MODEL = 'chatapp.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -94,7 +94,7 @@ WSGI_APPLICATION = 'THE_TECH_BROS.wsgi.application'
 # import dj_database_url
 
 # DATABASES = {
-#     'default': dj_database_url.config(
+#     'default': dj_database_url.config(ye
 #         default='postgres://postgres:baddest419@localhost:5432/techbros',
 #     )
 # }
