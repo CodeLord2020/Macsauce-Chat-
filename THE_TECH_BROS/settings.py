@@ -143,7 +143,7 @@ USE_TZ = True
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'  # Example path
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/images/'
