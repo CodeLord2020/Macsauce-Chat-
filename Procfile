@@ -1,0 +1,1 @@
+web: gunicorn THE_TECH_BROS.wsgi --log-file -

@@ -3,17 +3,6 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
-class User(AbstractUser):
-    name = models.CharField(max_length=200, null=True)
-    email = models.EmailField(unique=True, null=True)
-    bio = models.TextField(null=True)
-
-    avatar = models.ImageField(null=True, default="avatar.svg")
-
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = []
-
-
 Topic_options =(
 
     ('FrontEnd WEB', 'FrontEnd WEB'),
@@ -25,6 +14,17 @@ Topic_options =(
     ('Others', 'Others'),
     
 )
+class User(AbstractUser):
+    name = models.CharField(max_length=200, null=True)
+    email = models.EmailField(unique=True, null=True)
+    bio = models.TextField(null=True)
+
+    avatar = models.ImageField(null=True, default="avatar.svg")
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = []
+
+
 
 
 class Topic(models.Model): 
@@ -85,13 +85,4 @@ class Inbox(models.Model):
     def __str__(self):
         return f"Inbox for {self.user.username}"
 
-    # def update_last_message_time(self):
-    #     last_message = self.directmessage_set.order_by('-created_at').first()
-    #     if last_message:
-    #         self.last_message_time = last_message.created_at
-    #     else:
-    #         self.last_message_time = None
-    #     self.save()
-    # def save(self, *args, **kwargs):
-    #     self.update_last_message_time()
-    #     super().save(*args, **kwargs)
+   
