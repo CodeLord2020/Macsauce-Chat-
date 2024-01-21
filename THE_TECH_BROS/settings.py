@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG")
-APP_NAME = os.environ.get("FLY_APP_NAME")
+# APP_NAME = os.environ.get("FLY_APP_NAME")
 # ALLOWED_HOSTS = [f"{APP_NAME}.fly.dev"] 
 # ALLOWED_HOSTS += ["192.168.178.209", "localhost",  "196.220.133.21", "196.220.133.9", "127.0.0.1"]
 ALLOWED_HOSTS = ["*"]
@@ -171,5 +171,5 @@ EMAIL_HOST_USER =   os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD =  os.environ.get("EMAIL_HOST_PASSWORD")
 
 CSRF_TRUSTED_ORIGINS = [ 
-    'https://web-production-2e4a.up.railway.app'
+    'https://*.railway.app'
 ]
