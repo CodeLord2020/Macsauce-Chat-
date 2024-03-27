@@ -28,8 +28,12 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = os.environ.get("DEBUG")
 # APP_NAME = os.environ.get("FLY_APP_NAME")
 # ALLOWED_HOSTS = [f"{APP_NAME}.fly.dev"] 
-# ALLOWED_HOSTS += ["192.168.178.209", "localhost",  "196.220.133.21", "196.220.133.9", "127.0.0.1"]
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["localhost", 
+                 "127.0.0.1", 
+                 'macsauce-chat.onrender.com', 
+                 "*.onrender.com"]
+
+# ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -91,20 +95,21 @@ WSGI_APPLICATION = 'THE_TECH_BROS.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 
-# import dj_database_url
+import dj_database_url
 
-# DATABASES = {
+DATABASES = {
+    "default": dj_database_url.parse(os.environ.get("DATABASE_URL"))
 #     'default': dj_database_url.config(ye
 #         default='postgres://postgres:baddest419@localhost:5432/techbros',
 #     )
-# }
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 # Password validation
@@ -142,12 +147,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # Example path
+STATIC_ROOT = BASE_DIR / 'staticfiles'  
 
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Example path
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  
 MEDIA_URL = '/images/'
 
 STATICFILES_DIRS = [
@@ -171,5 +176,6 @@ EMAIL_HOST_USER =   os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD =  os.environ.get("EMAIL_HOST_PASSWORD")
 
 CSRF_TRUSTED_ORIGINS = [ 
-    'https://*.railway.app'
+    'https://*.railway.app',
+    'https://*.onrender.com'
 ]
