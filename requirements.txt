@@ -1,0 +1,13 @@
+asgiref==3.7.2
+Django==5.0.1
+django-cors-headers==4.3.1
+djangorestframework==3.14.0
+gunicorn==21.2.0
+packaging==23.2
+pillow==10.2.0
+python-dotenv==1.0.0
+pytz==2023.3.post1
+setuptools==68.2.2
+sqlparse==0.4.4
+tzdata==2023.4
+wheel==0.41.2
